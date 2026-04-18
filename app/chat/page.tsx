@@ -6,10 +6,6 @@ import { ChatMessage, UserProfile } from '@/types'
 
 const GREETING = "Hi! I'm here to help you find your perfect car. Let's start with the basics — what kind of vehicle are you thinking about, and what's your rough budget?"
 
-function stripThinking(text: string): string {
-  return text.replace(/<think>[\s\S]*?<\/think>/g, '').trim()
-}
-
 function extractProfile(text: string): { profile: UserProfile | null; clean: string } {
   const match = text.match(/<profile_ready>([\s\S]*?)<\/profile_ready>/)
   if (!match) return { profile: null, clean: text }
@@ -72,13 +68,13 @@ export default function ChatPage() {
       accumulated += decoder.decode(value, { stream: true })
       setMessages(m => [
         ...m.slice(0, -1),
-        { role: 'assistant', content: stripThinking(accumulated) },
+        { role: 'assistant', content: accumulated },
       ])
     }
 
     setLoading(false)
 
-    const { profile, clean } = extractProfile(stripThinking(accumulated))
+    const { profile, clean } = extractProfile(accumulated)
     if (profile) {
       setMessages(m => [...m.slice(0, -1), { role: 'assistant', content: clean }])
       sessionStorage.setItem('carfinder_profile', JSON.stringify(profile))
