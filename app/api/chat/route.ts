@@ -32,7 +32,25 @@ Once you have all 6 pieces of information, end your message with this exact bloc
 }
 </profile_ready>
 
-Include this block only after you have all 6 pieces. Do not include it in earlier messages.`
+Include this block only after you have all 6 pieces. Do not include it in earlier messages.
+
+TESTING SHORTCUT: If the user's message contains the word INSTANT (all caps), skip the conversation entirely and immediately respond with this exact message and profile block:
+
+Got it — using test profile.
+<profile_ready>
+{
+  "budget_min": 25000,
+  "budget_max": 40000,
+  "body_styles": ["suv", "crossover"],
+  "fuel_types": ["hybrid"],
+  "passengers_min": 4,
+  "daily_miles": 35,
+  "priorities": ["fuel_economy", "reliability", "safety", "comfort", "value", "tech", "cargo", "performance"],
+  "must_haves": [],
+  "deal_breakers": [],
+  "notes": "Test profile — INSTANT shortcut used."
+}
+</profile_ready>`
 
 export async function POST(req: Request) {
   const { messages } = await req.json() as { messages: ChatMessage[] }

@@ -7,7 +7,6 @@ import { UserProfile, Recommendation, ChatMessage } from '@/types'
 export default function RecommendationsPage() {
   const router = useRouter()
   const [recs, setRecs] = useState<Recommendation[]>([])
-  const [summary, setSummary] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -15,6 +14,7 @@ export default function RecommendationsPage() {
   const [chatInput, setChatInput] = useState('')
   const [chatLoading, setChatLoading] = useState(false)
   const [profile, setProfile] = useState<UserProfile | null>(null)
+  const [profileHash, setProfileHash] = useState<string | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -23,6 +23,7 @@ export default function RecommendationsPage() {
 
     const parsed: UserProfile = JSON.parse(stored)
     setProfile(parsed)
+    setProfileHash(sessionStorage.getItem('carfinder_profile_hash'))
 
     fetch('/api/recommend', {
       method: 'POST',
@@ -33,7 +34,6 @@ export default function RecommendationsPage() {
       .then(data => {
         if (data.error) { setError(data.error); return }
         setRecs(data.recommendations)
-        setSummary(data.summary)
         setChatMessages([{ role: 'assistant', content: data.summary }])
       })
       .catch(() => setError('Failed to load recommendations. Please try again.'))
@@ -122,6 +122,11 @@ export default function RecommendationsPage() {
           {recs.map((rec, i) => (
             <RecCard key={rec.vehicle.id} rec={rec} rank={i + 1} />
           ))}
+          {profileHash && (
+            <div className="pt-4 border-t border-gray-800">
+              <p className="text-xs text-gray-600 font-mono break-all">profile hash: {profileHash}</p>
+            </div>
+          )}
         </div>
 
         {/* Side chat — right 1/3 */}

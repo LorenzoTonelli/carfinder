@@ -1,11 +1,11 @@
 // Provider-agnostic LLM wrapper.
 // To switch LLM providers, update only this file.
-// Current provider: Google AI (gemini-2.5-flash-lite)
+// Current provider: Google AI (gemma-4-26b-a4b-it)
 
 import { GoogleGenerativeAI, Content } from '@google/generative-ai'
 import { ChatMessage } from '@/types'
 
-const MODEL = 'gemini-2.5-flash-lite'
+const MODEL = 'gemma-4-26b-a4b-it'
 
 function client() {
   return new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!)
